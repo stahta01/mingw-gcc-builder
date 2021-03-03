@@ -161,6 +161,7 @@ do_configure() {
 
   ../${_sourcedir}/configure \
     --prefix=${MINGW_PREFIX}/opt/gcc \
+    --program-suffix=-${_base_pkg_version} \
     --with-local-prefix=${MINGW_PREFIX}/local \
     --build=${MINGW_CHOST} \
     --host=${MINGW_CHOST} \
@@ -232,10 +233,10 @@ extract_to_gcc_folder       ${GMP_VERSION}.tar.bz2
 extract_to_gcc_folder       ${MPC_VERSION}.tar.gz
 
 # Patch GCC and support libs
-# apply_patches_edits
+apply_patches_edits
 
 # 
-# do_configure
+do_configure
 
 # Build GCC and support libs
 # do_clean
