@@ -22,6 +22,8 @@ MPC_VERSION=mpc-0.8.1
 # _sourcedir=${GCC_VERSION}
 _sourcedir=gcc_main_development
 
+# =========================================== #
+
 extract() {
     local tarfile="$1"
     local extracted="$(echo "$tarfile" | sed 's/\.tar.*$//')"
@@ -69,19 +71,6 @@ _extract_to_source_folder() {
 }
 # =========================================== #
 
-apply_patches() {
-  cd ${srcdir}/${_sourcedir}
-
-  apply_patch_with_msg \
-    104-gcc-4.6.4-Fix-texi-docs-syntax-errors.patch \
-    161-gcc-4.0-cfns-fix-mismatch-in-gnu_inline-attributes.patch \
-    132-gcc-4.3-dont-escape-arguments-that-dont-need-it-in-pex-win32.c.patch \
-    111-gcc-4.0-fix-for-windows-not-minding-non-existant-parent-dirs.patch \
-    131-gcc-4.0-windows-lrealpath-no-force-lowercase-nor-backslash.patch \
-    141-gcc-4.4-ktietz-libgomp.patch \
-    121-gcc-4.0-handle-use-mingw-ansi-stdio.patch || true
-}
-
 apply_edits() {
   cd ${srcdir}/${_sourcedir}
 
@@ -127,7 +116,7 @@ do_configure() {
       configure_opts+=("--disable-sjlj-exceptions")
       configure_opts+=("--with-dwarf2")
       LDFLAGS+=" -Wl,--large-address-aware"
-      export PATH="${_local_gcc32_prefix}/bin":$PATH
+      export PATH="/usr/bin:${_local_gcc32_prefix}/bin":$PATH
       export GNATBIND="${_local_gcc32_prefix}/bin/gnatbind"
       export GNATMAKE="${_local_gcc32_prefix}/bin/gnatmake"
       export CC="${_local_gcc32_prefix}/bin/gcc"
@@ -136,7 +125,7 @@ do_configure() {
     ;;
 
     x86_64)
-      export PATH="${_local_gcc64_prefix}/bin":$PATH
+      export PATH="/usr/bin:${_local_gcc64_prefix}/bin":$PATH
       export GNATBIND="${_local_gcc64_prefix}/bin/gnatbind"
       export GNATMAKE="${_local_gcc64_prefix}/bin/gnatmake"
       export CC="${_local_gcc64_prefix}/bin/gcc"
@@ -162,17 +151,16 @@ do_configure() {
     _languages+=",objc,obj-c++"
   fi
   
-  mkdir -p ${MINGW_PREFIX}/opt/gcc
+  mkdir -p ${MINGW_PREFIX}/opt/gcc${_base_pkg_version}
 
   ../${_sourcedir}/configure \
-    --prefix=${MINGW_PREFIX}/opt/gcc \
-    --program-suffix=-${_base_pkg_version} \
+    --prefix=${MINGW_PREFIX}/opt/gcc${_base_pkg_version} \
     --with-local-prefix=${MINGW_PREFIX}/local \
     --build=${MINGW_CHOST} \
     --host=${MINGW_CHOST} \
     --target=${MINGW_CHOST} \
     --with-native-system-header-dir=${MINGW_PREFIX}/${MINGW_CHOST}/include \
-    --libexecdir=${MINGW_PREFIX}/opt/gcc/lib \
+    --libexecdir=${MINGW_PREFIX}/opt/gcc${_base_pkg_version}/lib \
     --with-gxx-include-dir=${MINGW_PREFIX}/include/c++/${pkgver} \
     --enable-bootstrap \
     --with-arch=${_arch} \
@@ -222,6 +210,8 @@ build_and_install() {
   make -j1 install
 }
 
+# =========================================== #
+
 srcdir="`pwd`/src"
 mkdir -p ${srcdir} && cd ${srcdir}
 
@@ -237,13 +227,13 @@ extract_to_gcc_folder       ${MPFR_VERSION}.tar.bz2
 extract_to_gcc_folder       ${GMP_VERSION}.tar.bz2
 extract_to_gcc_folder       ${MPC_VERSION}.tar.gz
 
-# Patch GCC and support libs
-# apply_patches
+
 apply_edits
 
-# 
 do_configure
 
-# Build GCC and support libs
 # do_clean
 build_and_install
+
+trap - EXIT
+echo 'Success!'
