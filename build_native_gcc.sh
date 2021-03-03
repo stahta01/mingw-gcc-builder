@@ -9,6 +9,8 @@ _local_gcc64_prefix=/c/GreenApps64/gcc_4.6.0_mingw64_x86_64_K8+ada/mingw
 
 _threads="win32"
 _enable_bootstrap=no
+_enable_ada=yes
+
 _basename=gcc
 _base_pkg_version=4.6
 
