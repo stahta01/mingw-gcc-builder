@@ -14,12 +14,13 @@ _enable_ada=yes
 _basename=gcc
 _base_pkg_version=4.6
 
-GCC_VERSION="gcc-${_base_pkg_version}.4"
+#  GCC_VERSION="gcc-${_base_pkg_version}.4"
 MPFR_VERSION=mpfr-2.4.2
 GMP_VERSION=gmp-4.3.2
 MPC_VERSION=mpc-0.8.1
 
-_sourcedir=${GCC_VERSION}
+# _sourcedir=${GCC_VERSION}
+_sourcedir=gcc_main_development
 
 extract() {
     local tarfile="$1"
@@ -33,10 +34,10 @@ extract() {
 extract_to_gcc_folder() {
     local tarfile="$1"
     local subfolder="$(echo "$tarfile" | sed 's/-.*$//')"
-    if [ ! -d  "$GCC_VERSION/$subfolder" ]; then
-        echo "Extracting ${tarfile} to $GCC_VERSION/$subfolder"
-        mkdir -p "$GCC_VERSION/$subfolder"
-        tar -x --strip-components=1 -f "$tarfile" -C "$GCC_VERSION/$subfolder"
+    if [ ! -d  "$_sourcedir/$subfolder" ]; then
+        echo "Extracting ${tarfile} to $_sourcedir/$subfolder"
+        mkdir -p "$_sourcedir/$subfolder"
+        tar -x --strip-components=1 -f "$tarfile" -C "$_sourcedir/$subfolder"
     fi
 }
 
@@ -68,7 +69,7 @@ _extract_to_source_folder() {
 }
 # =========================================== #
 
-apply_patches_edits() {
+apply_patches() {
   cd ${srcdir}/${_sourcedir}
 
   apply_patch_with_msg \
@@ -79,6 +80,10 @@ apply_patches_edits() {
     131-gcc-4.0-windows-lrealpath-no-force-lowercase-nor-backslash.patch \
     141-gcc-4.4-ktietz-libgomp.patch \
     121-gcc-4.0-handle-use-mingw-ansi-stdio.patch || true
+}
+
+apply_edits() {
+  cd ${srcdir}/${_sourcedir}
 
   # Skip installing libiberty
   sed -i 's/install_to_$(INSTALL_DEST) //' libiberty/Makefile.in
@@ -221,19 +226,20 @@ srcdir="`pwd`/src"
 mkdir -p ${srcdir} && cd ${srcdir}
 
 # Download packages
-wget -nc https://ftp.gnu.org/gnu/gcc/$GCC_VERSION/$GCC_VERSION.tar.bz2
+# wget -nc https://ftp.gnu.org/gnu/gcc/$GCC_VERSION/$GCC_VERSION.tar.bz2
 wget -nc ftp://gcc.gnu.org/pub/gcc/infrastructure/${MPFR_VERSION}.tar.bz2
 wget -nc ftp://gcc.gnu.org/pub/gcc/infrastructure/${GMP_VERSION}.tar.bz2
 wget -nc ftp://gcc.gnu.org/pub/gcc/infrastructure/${MPC_VERSION}.tar.gz
 
 # Extract packages
-extract                     ${GCC_VERSION}.tar.bz2
+# extract                     ${GCC_VERSION}.tar.bz2
 extract_to_gcc_folder       ${MPFR_VERSION}.tar.bz2
 extract_to_gcc_folder       ${GMP_VERSION}.tar.bz2
 extract_to_gcc_folder       ${MPC_VERSION}.tar.gz
 
 # Patch GCC and support libs
-apply_patches_edits
+# apply_patches
+apply_edits
 
 # 
 do_configure
