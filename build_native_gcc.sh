@@ -1,4 +1,5 @@
 #! /usr/bin/bash
+# https://stackoverflow.com/questions/6109225/echoing-the-last-command-run-in-bash
 set -e
 trap 'previous_command=$this_command; this_command=$BASH_COMMAND' DEBUG
 trap 'echo FAILED COMMAND: $previous_command' EXIT
