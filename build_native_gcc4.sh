@@ -5,7 +5,7 @@ trap 'previous_command=$this_command; this_command=$BASH_COMMAND' DEBUG
 trap 'echo FAILED COMMAND: $previous_command' EXIT
 
 _local_gcc32_prefix=/c/GreenApps32/gcc_4.6.0-mingw32_x86_generic/mingw
-_local_gcc64_prefix=/c/GreenApps64/gcc_4.6.0_mingw64_x86_64_K8+ada/mingw
+_local_gcc64_prefix=/c/GreenApps64/gcc_4.6.0_mingw64_x86_64_K8+ada/mingw64
 
 _threads="win32"
 _enable_bootstrap=no
@@ -228,7 +228,7 @@ extract_to_gcc_folder       ${GMP_VERSION}.tar.bz2
 extract_to_gcc_folder       ${MPC_VERSION}.tar.gz
 
 
-apply_edits
+# apply_edits
 
 do_configure
 
