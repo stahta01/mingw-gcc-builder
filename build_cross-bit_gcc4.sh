@@ -122,17 +122,16 @@ do_configure() {
     _languages+=",objc,obj-c++"
   fi
 
-  mkdir -p /mingw64/opt/gcc${_base_pkg_version}
+  mkdir -p /mingw32/opt/gcc${_base_pkg_version}_x64
 
   ../${_sourcedir}/configure \
-    --prefix=/mingw64/opt/gcc${_base_pkg_version} \
+    --prefix=/mingw32/opt/gcc${_base_pkg_version}_x64 \
     --with-local-prefix=/mingw64/local \
     --build=i686-w64-mingw32 \
-    --host=x86_64-w64-mingw32 \
+    --host=i686-w64-mingw32 \
     --target=x86_64-w64-mingw32 \
     --with-native-system-header-dir=/mingw64/x86_64-w64-mingw32/include \
-    --libexecdir=/mingw64/opt/gcc${_base_pkg_version}/lib \
-    --with-gxx-include-dir=/mingw64/include/c++/${pkgver} \
+    --libexecdir=/mingw32/opt/gcc${_base_pkg_version}_x64/lib \
     --enable-bootstrap \
     --with-arch=${_arch} \
     --with-tune=generic \
@@ -156,7 +155,7 @@ do_configure() {
     --disable-werror \
     --disable-symvers \
     --with-libiconv \
-    --with-zlib=/mingw64 \
+    --with-zlib=/mingw32 \
     --with-pkgversion="Rev${pkgrel}, Built by stahta01 -- Tim S" \
     --with-bugurl="https://github.com/stahta01/GCC-MINGW-packages/issues" \
     --with-gnu-as --with-gnu-ld \
