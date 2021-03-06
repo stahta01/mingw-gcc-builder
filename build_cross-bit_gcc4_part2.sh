@@ -104,7 +104,7 @@ do_configure() {
 
   _local_gcc64_prefix=/mingw32/opt/gcc4.6_x64
 
-  export PATH="/usr/bin:${_local_gcc64_prefix}/bin":$PATH
+  export PATH="/usr/bin:${_local_gcc64_prefix}/bin:/mingw32/bin:$PATH"
   export GNATBIND="${_local_gcc64_prefix}/bin/gnatbind"
   export GNATMAKE="${_local_gcc64_prefix}/bin/gnatmake"
   export CC="${_local_gcc64_prefix}/bin/gcc"
