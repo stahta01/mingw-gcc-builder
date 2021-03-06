@@ -88,7 +88,7 @@ apply_edits() {
   } || {
     cp gcc/config/i386/mingw32.h gcc/config/i386/mingw32.h.src
   }
-  local MINGW_NATIVE_PREFIX=$(cygpath -am ${MINGW_PREFIX}/${MINGW_CHOST})
+  local MINGW_NATIVE_PREFIX=$(cygpath -am /mingw64/x86_64-w64-mingw32)
   sed -i "s/\\/mingw\\//${MINGW_NATIVE_PREFIX//\//\\/}\\//g" gcc/config/i386/mingw32.h
 
   # FIX "The directory that should contain system headers does not exist: /mingw/include"
@@ -97,33 +97,13 @@ apply_edits() {
 }
 
 do_configure() {
-  [[ -d ${srcdir}/build-${MINGW_CHOST} ]] && rm -rf ${srcdir}/build-${MINGW_CHOST}
-  mkdir -p ${srcdir}/build-${MINGW_CHOST} && cd ${srcdir}/build-${MINGW_CHOST}
+  [[ -d ${srcdir}/build-x86_64-w64-mingw32 ]] && rm -rf ${srcdir}/build-x86_64-w64-mingw32
+  mkdir -p ${srcdir}/build-x86_64-w64-mingw32 && cd ${srcdir}/build-x86_64-w64-mingw32
 
   local -a configure_opts
 
-  case "${MSYSTEM_CARCH}" in
-    i686)
-      configure_opts+=("--disable-sjlj-exceptions")
-      configure_opts+=("--with-dwarf2")
-      LDFLAGS+=" -Wl,--large-address-aware"
-      export PATH="/usr/bin:${_local_gcc32_prefix}/bin":$PATH
-      export GNATBIND="${_local_gcc32_prefix}/bin/gnatbind"
-      export GNATMAKE="${_local_gcc32_prefix}/bin/gnatmake"
-      export CC="${_local_gcc32_prefix}/bin/gcc"
-      export CXX="${_local_gcc32_prefix}/bin/g++"
-      local _arch=i686
-    ;;
+  local _arch=x86-64
 
-    x86_64)
-      export PATH="/usr/bin:${_local_gcc64_prefix}/bin":$PATH
-      export GNATBIND="${_local_gcc64_prefix}/bin/gnatbind"
-      export GNATMAKE="${_local_gcc64_prefix}/bin/gnatmake"
-      export CC="${_local_gcc64_prefix}/bin/gcc"
-      export CXX="${_local_gcc64_prefix}/bin/g++"
-      local _arch=x86-64
-    ;;
-  esac
 
   if [ "$_enable_bootstrap" == "yes" ]; then
     configure_opts+=("--enable-bootstrap")
@@ -141,18 +121,18 @@ do_configure() {
   if [ "$_enable_objc" == "yes" ]; then
     _languages+=",objc,obj-c++"
   fi
-  
-  mkdir -p ${MINGW_PREFIX}/opt/gcc${_base_pkg_version}
+
+  mkdir -p /mingw64/opt/gcc${_base_pkg_version}
 
   ../${_sourcedir}/configure \
-    --prefix=${MINGW_PREFIX}/opt/gcc${_base_pkg_version} \
-    --with-local-prefix=${MINGW_PREFIX}/local \
-    --build=${MINGW_CHOST} \
-    --host=${MINGW_CHOST} \
-    --target=${MINGW_CHOST} \
-    --with-native-system-header-dir=${MINGW_PREFIX}/${MINGW_CHOST}/include \
-    --libexecdir=${MINGW_PREFIX}/opt/gcc${_base_pkg_version}/lib \
-    --with-gxx-include-dir=${MINGW_PREFIX}/include/c++/${pkgver} \
+    --prefix=/mingw64/opt/gcc${_base_pkg_version} \
+    --with-local-prefix=/mingw64/local \
+    --build=i686-w64-mingw32 \
+    --host=x86_64-w64-mingw32 \
+    --target=x86_64-w64-mingw32 \
+    --with-native-system-header-dir=/mingw64/x86_64-w64-mingw32/include \
+    --libexecdir=/mingw64/opt/gcc${_base_pkg_version}/lib \
+    --with-gxx-include-dir=/mingw64/include/c++/${pkgver} \
     --enable-bootstrap \
     --with-arch=${_arch} \
     --with-tune=generic \
@@ -176,7 +156,7 @@ do_configure() {
     --disable-werror \
     --disable-symvers \
     --with-libiconv \
-    --with-zlib=${MINGW_PREFIX} \
+    --with-zlib=/mingw64 \
     --with-pkgversion="Rev${pkgrel}, Built by stahta01 -- Tim S" \
     --with-bugurl="https://github.com/stahta01/GCC-MINGW-packages/issues" \
     --with-gnu-as --with-gnu-ld \
@@ -184,7 +164,7 @@ do_configure() {
 }
 
 do_clean() {
-  cd ${srcdir}/build-${MINGW_CHOST}
+  cd ${srcdir}/build-x86_64-w64-mingw32
 
   make -j1 all clean
 
@@ -192,7 +172,7 @@ do_clean() {
 }
 
 build_and_install() {
-  cd ${srcdir}/build-${MINGW_CHOST}
+  cd ${srcdir}/build-x86_64-w64-mingw32
 
   del_file_exists gcc/gtype.state || true
 
