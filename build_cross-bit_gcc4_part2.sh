@@ -102,6 +102,14 @@ do_configure() {
 
   local -a configure_opts
 
+  _local_gcc64_prefix=/mingw32/opt/gcc4.6_x64
+
+  export PATH="/usr/bin:${_local_gcc64_prefix}/bin":$PATH
+  export GNATBIND="${_local_gcc64_prefix}/bin/gnatbind"
+  export GNATMAKE="${_local_gcc64_prefix}/bin/gnatmake"
+  export CC="${_local_gcc64_prefix}/bin/gcc"
+  export CXX="${_local_gcc64_prefix}/bin/g++"
+
   local _arch=x86-64
 
 
