@@ -122,7 +122,7 @@ do_configure() {
     _languages+=",objc,obj-c++"
   fi
 
-  mkdir -p /mingw32/opt/gcc${_base_pkg_version}_x64
+  mkdir -p /mingw32/opt/gcc${_base_pkg_version}_x64/include/c++/${pkgver}
 
   ../${_sourcedir}/configure \
     --prefix=/mingw32/opt/gcc${_base_pkg_version}_x64 \
@@ -132,7 +132,7 @@ do_configure() {
     --target=x86_64-w64-mingw32 \
     --with-native-system-header-dir=/mingw64/x86_64-w64-mingw32/include \
     --libexecdir=/mingw32/opt/gcc${_base_pkg_version}_x64/lib \
-    --enable-bootstrap \
+    --with-gxx-include-dir=/mingw32/opt/gcc${_base_pkg_version}_x64/include/c++/${pkgver} \
     --with-arch=${_arch} \
     --with-tune=generic \
     --enable-languages=${_languages} \
