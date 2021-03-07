@@ -111,7 +111,7 @@ do_configure() {
     configure_opts+=("--disable-bootstrap")
   fi
 
-  local _languages="c,lto,c++"
+  local _languages="c,lto"
   if [ "$_enable_fortran" == "yes" ]; then
     _languages+=",fortran"
   fi
@@ -122,7 +122,7 @@ do_configure() {
     _languages+=",objc,obj-c++"
   fi
 
-  mkdir -p /mingw32/opt/gcc${_base_pkg_version}_x64/include/c++/${pkgver}
+  mkdir -p /mingw32/opt/gcc${_base_pkg_version}_x64
 
   ../${_sourcedir}/configure \
     --prefix=/mingw32/opt/gcc${_base_pkg_version}_x64 \
@@ -132,7 +132,6 @@ do_configure() {
     --target=x86_64-w64-mingw32 \
     --with-native-system-header-dir=/mingw64/x86_64-w64-mingw32/include \
     --libexecdir=/mingw32/opt/gcc${_base_pkg_version}_x64/lib \
-    --with-gxx-include-dir=/mingw32/opt/gcc${_base_pkg_version}_x64/include/c++/${pkgver} \
     --with-arch=${_arch} \
     --with-tune=generic \
     --enable-languages=${_languages} \
@@ -141,7 +140,6 @@ do_configure() {
     --enable-threads=${_threads} \
     --enable-graphite \
     --enable-fully-dynamic-string \
-    --enable-libstdcxx-time=yes \
     --disable-libstdcxx-pch \
     --disable-libstdcxx-debug \
     --enable-version-specific-runtime-libs \
