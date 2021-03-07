@@ -128,8 +128,8 @@ do_configure() {
     --prefix=/opt/gcc${_base_pkg_version}_x64 \
     --with-local-prefix=/mingw64/local \
     --build=i686-w64-mingw32 \
-    --host=i686-w64-mingw32 \
-    --target=x86_64-pc-msys \
+    --host=x86_64-pc-msys \
+    --target=x86_64-w64-mingw32 \
     --with-native-system-header-dir=/mingw64/x86_64-w64-mingw32/include \
     --libexecdir=/opt/gcc${_base_pkg_version}_x64/lib \
     --with-arch=${_arch} \
@@ -155,7 +155,7 @@ do_configure() {
     --disable-werror \
     --disable-symvers \
     --with-libiconv \
-    --with-zlib=/mingw32 \
+    --with-zlib=/usr \
     --with-pkgversion="Rev${pkgrel}, Built by stahta01 -- Tim S" \
     --with-bugurl="https://github.com/stahta01/GCC-MINGW-packages/issues" \
     --with-gnu-as --with-gnu-ld \
