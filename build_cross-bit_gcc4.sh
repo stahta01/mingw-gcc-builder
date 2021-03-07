@@ -135,6 +135,8 @@ do_configure() {
     --with-arch=${_arch} \
     --with-tune=generic \
     --enable-languages=${_languages} \
+    --enable-libada \
+    --enable-libssp \
     --enable-shared --enable-static \
     --enable-libatomic \
     --enable-threads=${_threads} \
