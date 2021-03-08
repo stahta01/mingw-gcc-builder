@@ -1,0 +1,31 @@
+--- binutils-2.18.orig/bfd/doc/bfd.texinfo	2007-08-07 04:59:44.000000000 +0900
++++ binutils-2.18/bfd/doc/bfd.texinfo	2013-10-10 21:08:23.905070291 +0900
+@@ -323,7 +323,7 @@
+ @printindex cp
+ 
+ @tex
+-% I think something like @colophon should be in texinfo.  In the
++% I think something like @@colophon should be in texinfo.  In the
+ % meantime:
+ \long\def\colophon{\hbox to0pt{}\vfill
+ \centerline{The body of this manual is set in}
+@@ -334,7 +334,7 @@
+ \centerline{{\sl\fontname\tensl\/}}
+ \centerline{are used for emphasis.}\vfill}
+ \page\colophon
+-% Blame: doc@cygnus.com, 28mar91.
++% Blame: doc@@cygnus.com, 28mar91.
+ @end tex
+ 
+ @bye
+--- binutils-2.18.orig/bfd/doc/elf.texi	2007-08-07 05:39:25.000000000 +0900
++++ binutils-2.18/bfd/doc/elf.texi	2013-10-10 21:19:46.199248015 +0900
+@@ -8,7 +8,7 @@
+ haven't bothered yet.
+ 
+ @findex bfd_elf_find_section
+-@subsubsection @code{bfd_elf_find_section}
++@subsection @code{bfd_elf_find_section}
+ @strong{Synopsis}
+ @example
+ struct elf_internal_shdr *bfd_elf_find_section (bfd *abfd, char *name);

@@ -1,0 +1,17 @@
+--- binutils-2.18/binutils/cxxfilt.c	2007-08-06 19:55:10.000000000 +0000
++++ binutils-2.18/binutils/cxxfilt.c	2011-12-13 00:13:40.000000000 +0000
+@@ -63,12 +63,12 @@
+   result = cplus_demangle (mangled_name + skip_first, flags);
+ 
+   if (result == NULL)
+-    printf (mangled_name);
++    printf ("%s",mangled_name);
+   else
+     {
+       if (mangled_name[0] == '.')
+ 	putchar ('.');
+-      printf (result);
++      printf ("%s",result);
+       free (result);
+     }
+ }
